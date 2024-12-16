@@ -5,10 +5,6 @@ const mongoose = require("mongoose");
 // MongoDB connection URI for Azure Cosmos DB
 const uri = process.env.AZURE_COSMOSDB_CONN_STRING;
 
-// Database and collection names
-const dbName = process.env.AZURE_COSMOS_DBNAME;
-const collectionName = process.env.AZURE_COLLECTION_NAME;
-
 // Define schema for your documents
 const dataSchema = new mongoose.Schema({
   call_sid: String,
@@ -17,7 +13,7 @@ const dataSchema = new mongoose.Schema({
 });
 
 // Define model
-const DataModel = mongoose.model("Data", dataSchema);
+const DataModel = mongoose.model("Data", dataSchema, "vach_transciptions");
 
 // Connect to MongoDB
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
