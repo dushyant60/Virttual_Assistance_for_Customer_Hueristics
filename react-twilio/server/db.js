@@ -3,11 +3,11 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
 // MongoDB connection URI for Azure Cosmos DB
-const uri = "mongodb://website-db:F56bpdlxFVqaHsaV62byIRctXeIenTigviPHqXXvQHpLMxYqrNKuHHMrombeObTHNO2AKi0zXXV4ACDbzia6BQ==@website-db.mongo.cosmos.azure.com:10255/?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&appName=@website-db@";
+const uri = process.env.AZURE_COSMOSDB_CONN_STRING;
 
 // Database and collection names
-const dbName = "vach db";
-const collectionName = "vachdbcollection";
+const dbName = process.env.AZURE_COSMOS_DBNAME;
+const collectionName = process.env.AZURE_COLLECTION_NAME;
 
 // Define schema for your documents
 const dataSchema = new mongoose.Schema({

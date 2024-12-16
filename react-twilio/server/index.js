@@ -33,8 +33,8 @@ const sendTokenResponse = (token, res) => {
     res.send(JSON.stringify({ token: token.toJwt() }));  
 };  
   
-const subscriptionKey = '56789552fd00412fb4cc9407e7a1e8a8';  
-const serviceRegion = 'centralindia';  
+const subscriptionKey = process.env.AZURE_SUBS_KEY;  
+const serviceRegion = process.env.AZURE_SERVICE_REGION;  
   
 // Add error handling for server  
 server.on('error', (error) => {  
@@ -206,13 +206,16 @@ app.delete("/voice/waiting-list/:number", (req, res) => {
 });  
   
 // Twilio credentials  
-const accountSid = 'ACe92fe807bd481b5b8ffa392afe1a890f';  
-const authToken = '0dbf6cd96a6113212fdd766601a741ad';  
+const accountSid = process.env.TWILIO_ACCOUNT_SID;  
+// console.log("abb ye bhi dekh", accountSid);
+const authToken = process.env.TWILIO_AUTH_TOKEN;  
+// console.log("aaur ye bhi dekh", authToken); 
 const twilioClient = twilio(accountSid, authToken);  
   
 // Blob Storage credentials  
-const connectionString = 'DefaultEndpointsProtocol=https;AccountName=recordedcall;AccountKey=EuzY+felTjStPJXsBJo0BXyp6KtdovCmjOVYsU8d/ghXcjfQ7BxZh8J+A/HG4+00FeldlMbT6ikB+AStPnBkMQ==;EndpointSuffix=core.windows.net';  
-const containerName = 'recorededcall';  
+const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;  
+// console.log("abb ye dekh", connectionString);
+const containerName = process.env.AZURE_STORAGE_CONTAINER_NAME;  
   
 // Authenticate with Twilio  
 const twilioAuth = {  

@@ -7,12 +7,12 @@ const app = express();
 const PORT = process.env.PORT || 3006;
 
 // Twilio credentials
-const accountSid = 'ACe92fe807bd481b5b8ffa392afe1a890f';  
-const authToken = '0dbf6cd96a6113212fdd766601a741ad';  
+const accountSid = process.env.TWILIO_ACCOUNT_SID;  
+const authToken = process.env.TWILIO_AUTH_TOKEN;   
 
 // Blob Storage credentials
-const connectionString = 'DefaultEndpointsProtocol=https;AccountName=recordedcall;AccountKey=EuzY+felTjStPJXsBJo0BXyp6KtdovCmjOVYsU8d/ghXcjfQ7BxZh8J+A/HG4+00FeldlMbT6ikB+AStPnBkMQ==;EndpointSuffix=core.windows.net';
-const containerName = 'recorededcall';
+const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;  
+const containerName = process.env.AZURE_STORAGE_CONTAINER_NAME
 
 // Authenticate with Twilio
 const twilioAuth = {
@@ -57,7 +57,7 @@ async function uploadToBlobStorage(filePath) {
 app.get('/download-and-upload', async (req, res) => {
   try {
     // Download audio file from Twilio
-    await downloadAudioFile('https://api.twilio.com/2010-04-01/Accounts/ACe92fe807bd481b5b8ffa392afe1a890f/Recordings/0dbf6cd96a6113212fdd766601a741ad');
+    await downloadAudioFile(`https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Recordings/${authToken}`);
     console.log('Audio file downloaded successfully');
 
     // Upload audio file to Azure Blob Storage

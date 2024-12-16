@@ -123,8 +123,10 @@ const CallSummaryCard = () => {
 
   // Function to fetch Twilio calls
   const fetchTwilioCalls = async () => {
-    const twilioAccountSid = "ACe92fe807bd481b5b8ffa392afe1a890f";
-    const twilioAuthToken = "0dbf6cd96a6113212fdd766601a741ad";
+    const twilioAccountSid = process.env.REACT_APP_TWILIO_ACCOUNT_SID;
+    // console.log("dekh",twilioAccountSid);
+    const twilioAuthToken = process.env.REACT_APP_TWILIO_AUTH_TOKEN;
+    // console.log("ye bhi dekh",twilioAuthToken);
     const config = {
       headers: {
         Authorization: `Basic ${btoa(`${twilioAccountSid}:${twilioAuthToken}`)}`,

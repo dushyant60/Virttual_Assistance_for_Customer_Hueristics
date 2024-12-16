@@ -106,8 +106,8 @@ app.get('/api/get-speech-token', async (req, res, next) => {
     }
 });
 
-const accountSid = 'ACe92fe807bd481b5b8ffa392afe1a890f';  
-const authToken = '0dbf6cd96a6113212fdd766601a741ad';  
+const accountSid = process.env.TWILIO_ACCOUNT_SID;  
+const authToken = process.env.TWILIO_AUTH_TOKEN;   
 
 
 const twilioClient = twilio(accountSid, authToken);

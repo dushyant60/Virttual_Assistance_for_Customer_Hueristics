@@ -130,9 +130,10 @@ function CallLog() {
 
   const [searchQuery, setSearchQuery] = useState("");
 
+
   useEffect(() => {
-    const twilioAccountSid = 'ACe92fe807bd481b5b8ffa392afe1a890f';  
-const twilioAuthToken = '0dbf6cd96a6113212fdd766601a741ad';  
+const twilioAccountSid = process.env.REACT_APP_TWILIO_ACCOUNT_SID;  
+const twilioAuthToken = process.env.REACT_APP_TWILIO_AUTH_TOKEN;  
 
     const config = {
       headers: {
@@ -143,7 +144,7 @@ const twilioAuthToken = '0dbf6cd96a6113212fdd766601a741ad';
     // Make an API request to Twilio to fetch call log details
     axios
       .get(
-        "https://api.twilio.com/2010-04-01/Accounts/ACe92fe807bd481b5b8ffa392afe1a890f/Calls.json",
+        `https://api.twilio.com/2010-04-01/Accounts/${twilioAccountSid}/Calls.json`,
         config
       )
       .then((response) => {

@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Twilio } from 'twilio';
 import SimplePeer from 'simple-peer';
 
-const accountSid = 'ACe92fe807bd481b5b8ffa392afe1a890f';  
-const authToken = '0dbf6cd96a6113212fdd766601a741ad';  
+const accountSid = process.env.REACT_APP_TWILIO_ACCOUNT_SID;  
+const authToken = process.env.REACT_APP_TWILIO_AUTH_TOKEN;   
 
 const twilioClient = new Twilio(accountSid, authToken);
 const recognition = new window.SpeechRecognition();
