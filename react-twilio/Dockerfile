@@ -1,0 +1,15 @@
+FROM node:alpine
+RUN mkdir -p /react-twilio
+WORKDIR /react-twilio/
+COPY  package.json ./
+COPY  package-lock.json ./
+COPY ./ ./
+RUN npm i 
+EXPOSE 3001
+ENV TWILIO_ACCOUNT_SID=ACb7ab01c22027a8110f0ea3d7c23ef0a6
+ENV TWILIO_API_KEY=SK649687dee93a08266edf23cec531647f
+ENV TWILIO_API_SECRET=4DWMwFkHipn21c2vCLalyxeiLx0orO3g  
+ENV TWILIO_TWIML_APP_SID=AP23aa9bc3d18f00a3ef1c34779f1ee549
+ENV TWILIO_ALLOW_INCOMING_CALLS=true
+ENV FROM_NUMBER=+15014393054
+CMD ["npm","run", "server"]

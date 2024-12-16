@@ -1,0 +1,26 @@
+# Ignore sensitive files
+.env
+*.json
+
+# dependencies
+/node_modules
+/minikube-deploy
+/.pnp
+.pnp.js
+minikube-deploy
+# testing
+/coverage
+
+# production
+/build
+
+# misc
+.DS_Store
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

@@ -1,0 +1,138 @@
+.hcontainer {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  bottom: 0;
+  left: 0;
+  position: relative;
+
+}
+
+.hvideo-background {
+  /* position: relative; */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: flex;
+}
+
+.htext-container {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  padding: 30px;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.htext {
+  position: relative;
+  color: white;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.box {
+  height: 20vh;
+  width: 20vw;
+  margin: 18px;
+  background-color: #ECEFF1;
+  border-radius: 13px;
+  display: flex;
+  box-shadow: 5px 3px 0px #c9a9e7;
+  justify-content: center;
+  /* transition: width 2s, height 4s; */
+}
+
+.box:hover {
+  background: #d6cee1;
+  cursor: pointer;
+}
+
+.link {
+  font-weight: 600;
+  color: black;
+  list-style: none;
+  text-decoration: none;
+}
+
+.boxContent {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  padding-inline: px;
+}
+
+.box2 {
+  height: 20vh;
+  width: 20vw;
+  margin: 18px;
+  background-color: #c6e4e2;
+  border-radius: 13px;
+  display: flex;
+  box-shadow: 5px 3px 0px #6d80e2;
+  justify-content: center
+}
+.box2:hover {
+  background: #b3bce8;
+  cursor: pointer;
+}
+.box3 {
+  height: 20vh;
+  width: 20vw;
+  margin: 18px;
+  background-color: #e7dfe9;
+  border-radius: 13px;
+  display: flex;
+  box-shadow: 5px 3px 0px rgb(237 152 232);
+  justify-content: center
+}
+.box3:hover {
+  background:rgb(245, 223, 245);
+  cursor: pointer;
+}
+.box4 {
+  height: 20vh;
+  width: 20vw;
+  margin: 18px;
+  background-color: rgb(242 188 188);
+  border-radius: 13px;
+  display: flex;
+  box-shadow: 5px 3px 0px #d74f7d;
+  justify-content: center
+}
+.box4:hover {
+  background: #f3bbce;
+  cursor: pointer;
+}
+.box5 {
+  height: 20vh;
+  width: 20vw;
+  margin: 18px;
+  background-color: #ece399;
+  border-radius: 13px;
+  display: flex;
+  box-shadow:5px 3px 0px #ada775;
+  justify-content: center
+}
+.box5:hover {
+  background: #f0eab1;
+  cursor: pointer;
+}
+.box6 {
+  height: 20vh;
+  width: 20vw;
+  margin: 18px;
+  background-color: #E8F5E9;
+  border-radius: 13px;
+  display: flex;
+  box-shadow: 5px 3px 0px rgb(19 255 203);
+  justify-content: center
+}
+.box6:hover {
+  background: #c8f2f1;
+  cursor: pointer;
+}

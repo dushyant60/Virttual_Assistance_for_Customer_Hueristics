@@ -1,0 +1,76 @@
+.containerL {
+    margin: 0;
+    background-image: url('./images/glambackground.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    height:99vh;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.button {
+    width: 100%;
+    padding: 10px 0;
+    font-weight: bold;
+    color: white;
+    font-size: 20px;
+    border: 0px;
+    border-radius: 5px;
+    background-image: linear-gradient(to left, #74ebd5, #9face6)
+}
+.MuiFormerHelperText-root{
+    color: red !important;
+}
+.MuiFormControlLabel-label {
+    font-weight: bolder !important;
+}
+
+.MuiOutlinedInput-root.Mui-focused {
+    &>fieldset {
+        border-image: linear-gradient(to right, #9face6, #74ebd5) !important;
+        border-image-slice: 1 !important;
+    }
+}
+a{
+    color: black;
+    font-weight: bold;
+}
+
+.text-bubble {
+    border-radius: 9px 9px 9px 0px;
+    box-shadow: grey 1px 2px 6px;
+    background: rgb(232 232 232),;
+    color:black;
+    width: auto;
+    padding:12px;
+    margin-bottom: 1rem;
+    margin-right:25px;
+    width: fit-content;
+  }
+  
+  .text-bubble.stopped {
+    animation: none;
+  }
+  
+  @keyframes flow {
+    0% {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+  }
+  
+  .text-bubble p {
+    margin: 0;
+    font-size: 18px;
+    /* color: white; */
+  }
+  

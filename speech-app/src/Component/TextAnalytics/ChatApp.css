@@ -1,0 +1,220 @@
+/* Add this CSS to your ChatApp.css or a separate CSS file */
+
+/* Style for the left-appearing message */
+.appear-from-left {
+  opacity: 0;
+  /* Initially set the opacity to 0 to make it invisible */
+  transform: translateX(-100%);
+  /* Initial position, messages start off-screen to the left */
+
+  /* You can customize these properties to adjust the appearance */
+  position: relative;
+  /* Required for z-index to work */
+  z-index: 1;
+  /* Ensure the message appears on top of other messages */
+  background-color: #f3f2f2;
+  /* Background color */
+  color: black;
+  /* Text color */
+  border-radius: 5px;
+  /* Rounded corners */
+  box-shadow: grey 1px 2px 6px;
+  /* Box shadow for a subtle depth effect */
+  padding: 12px;
+  /* Padding inside the message */
+  margin-bottom: 1rem;
+  /* Spacing between messages */
+  width: auto;
+  /* Allow message width to adjust to content */
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  /* Animation transitions */
+}
+
+/* Add more styles as needed to further customize the appearance */
+
+/* Apply the animation when the message becomes visible */
+.appear-from-left.active {
+  opacity: 1;
+  /* Make the message visible by setting opacity to 1 */
+  transform: translateX(0);
+  /* Move the message to its final position */
+}
+
+text-bubble {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  background-color: #3498db;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: flow 5s linear infinite;
+}
+
+.text-bubble.stopped {
+  animation: none;
+}
+
+@keyframes flow {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}
+
+.text-bubble p {
+  margin: 0;
+  font-size: 18px;
+  /* color: white; */
+}
+
+.boticon {
+  position: fixed;
+  bottom: 0px;
+  right: 20px;
+  cursor: pointer;
+  height: 10vh
+}
+
+.botstyle {
+  position: fixed;
+  bottom: 36px;
+  right: 20px;
+  width: 398px;
+  height: 636px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.3);
+  background: white;
+}
+
+.botheader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: darkblue;
+  color: white;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+
+}
+
+.botheader .bottext {
+  font-weight: bold;
+  margin-left: 12px;
+}
+
+.greetingBox {
+  height: 537px;
+  overflow-y: auto;
+  padding: 10px;
+  background-color: #f3f2f2;
+  border-radius: 12px
+}
+
+.msgbox {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.userinput {
+  border-radius: 9px 9px 0px 9px;
+  box-shadow: blue 1px 2px 3px;
+  background: darkblue;
+  color: white;
+  width: auto;
+  padding: 1rem;
+  margin-right: 5px
+}
+
+.boticonstyling {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.botreply {
+  border-radius: 9px 9px 9px 0px;
+  box-shadow: grey 1px 2px 6px;
+  /* background: 'rgb(232 232 232)', */
+  color: black;
+  width: auto;
+  padding: 12px;
+  margin-bottom: 1rem;
+  margin-right: 25px;
+
+}
+
+.botques {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+
+}
+
+.botquestag {
+  background: #3498db;
+  border-radius: 10px;
+  color: white;
+  padding-inline: 8px;
+  margin: 5px;
+  cursor: pointer;
+
+}
+
+.textarea {
+  position: absolute;
+  bottom: 0px;
+  left: 10px;
+  width: calc(100% - 20px);
+  /* border:"2px solid red" */
+
+}
+
+.textarea2 {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px
+}
+
+.homeicon {
+  font-size: 2.5rem;
+  color: grey;
+  cursor: pointer
+}
+
+.textfield {
+  background: white;
+  border-radius: 20px;
+  border: none
+}
+
+
+.textarea2 .cloudicon {
+  cursor: pointer;
+  border-radius: 10px;
+  font-size: 1rem;
+  background-color: blue;
+  color: white;
+  margin-left: 5px;
+  height: 5vh
+}
+.docs{ 
+    font-size: 14px;
+    margin: 10px;
+    color: green;
+    text-align: center;
+  
+}

@@ -1,0 +1,91 @@
+/* Scroll Bar */
+
+/* ScrollStyle.css */
+
+/* Define your custom scrollbar styles */
+::-webkit-scrollbar {
+  width: 5px; /* Thickness for the y-axis scrollbar */
+  height: 5px; /* Thickness for the x-axis scrollbar */
+  display: none;
+}
+
+/* Show scrollbar on hover */
+:hover::-webkit-scrollbar {
+  display: block;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgb(182, 224, 245);
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+
+
+
+
+.summarytab {
+    display: flex;
+    justify-content: center;
+    background: white;
+    /* color: white; */
+    box-shadow: 1px 1px 1px grey;
+    margin-right: 5px;
+    height: 9vh;
+    width: 6VW;
+    text-align: center;
+    align-items: center;
+    word-wrap: break-word;
+    flex-direction: column;
+    cursor: pointer;
+    margin: 4px;
+    color: white;
+    transition: background-color 0.3s, height 0.3s;
+    border-radius: 18px;
+}
+
+.record-wave{
+  height:11vh !important;
+}
+
+.value{
+    color: grey;
+    font-weight:bold;
+    font-size: 18px;
+
+}
+.element {
+    background: #e9def4;
+    position: relative;
+  }
+  
+  .element::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 50%;
+    background: linear-gradient(rgba(255, 255, 255, 0.7), transparent);
+    z-index: 1;
+  }
+  
+  .element::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.2));
+    z-index: 2;
+  }
+  .caller {
+    background: #1fb2d0;
+    position: relative;
+  }
+  
+  

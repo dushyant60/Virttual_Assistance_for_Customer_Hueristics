@@ -1,0 +1,40 @@
+/*  */
+  
+  .dcontainer {
+    /* max-width: 800px; */
+    /* margin:30px; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  #deleteBtnContainer #deleteBtn {
+    /* position: absolute;
+    top: 50px;
+    left: 50px; */
+    /* margin:0px 12px; */
+    /* margin-right: 16px; */
+  }
+  
+  #browseContainer input{
+    /* margin-top: 50px; */
+    /* text-align: center; */
+    /* border: 2px solid red; */
+    /* color:white; */
+  }
+  .btnContainer{
+    display:flex;
+    /* border:2px solid; */
+    /* justify-content: center; */
+    align-items: center;
+    /* margin: 13px 0px; */
+  }
+  
+  #uploadContainer button{
+    margin-left: 20px;
+    margin-top:0px
+  }
+  .TableCell{
+   font-size: 1.5rem; 
+  }
