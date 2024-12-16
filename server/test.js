@@ -4,15 +4,15 @@ const fs = require('fs');
 const { BlobServiceClient } = require('@azure/storage-blob');
 
 const app = express();
-const PORT = process.env.PORT || 3006;
+const PORT = process.env.PORT || 4000;
 
 // Twilio credentials
-const accountSid = process.env.TWILIO_ACCOUNT_SID;  
-const authToken = process.env.TWILIO_AUTH_TOKEN;   
+const accountSid = process.env.REACT_APP_TWILIO_ACCOUNT_SID;  
+const authToken = process.env.REACT_APP_TWILIO_AUTH_TOKEN;   
 
 // Blob Storage credentials
-const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;  
-const containerName = process.env.AZURE_STORAGE_CONTAINER_NAME
+const connectionString = process.env.REACT_APP_AZURE_STORAGE_CONNECTION_STRING;  
+const containerName = process.env.REACT_APP_AZURE_STORAGE_CONTAINER_NAME
 
 // Authenticate with Twilio
 const twilioAuth = {
