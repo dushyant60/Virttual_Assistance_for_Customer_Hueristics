@@ -111,7 +111,7 @@ const AgentCallSummary = (props) => {
 ;
       // Make API call to Azure OpenAI Chat Completion service
       axios.post(
-        'https://openai-glam.openai.azure.com/openai/deployments/gpt35-turbo/chat/completions?api-version=2024-02-15-preview',
+        'https://azureopenaiol.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2023-09-15-preview',
         {
           messages: [
             {
@@ -123,7 +123,7 @@ const AgentCallSummary = (props) => {
         {
           headers: {
             'Content-Type': 'application/json',
-            'api-key': '0c7473739bb4409a82ce91a565fa983d',
+            'api-key': 'fdb12bb67a764cd2b74676dd5afa58d3',
           }
         }
       )

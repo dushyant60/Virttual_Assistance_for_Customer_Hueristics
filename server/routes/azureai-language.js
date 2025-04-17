@@ -3,11 +3,10 @@
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
-const config = require('../config.json');
 
 // get config
-const textAnalyticsKey = config[0].text_analytics_key;
-const textAnalyticsEndpoint = config[0].text_analytics_endpoint;    
+const textAnalyticsKey = process.env.TEXT_ANALYTICS_KEY;
+const textAnalyticsEndpoint = process.env.TEXT_ANALYTICS_ENDPOINT;    
 
 //"use strict";
 const { TextAnalyticsClient, AzureKeyCredential } = require("@azure/ai-text-analytics");
@@ -30,7 +29,7 @@ router.post('/ta-key-phrases', async (req, res) => {
             requestText,
         ];
         const textAnalyticsClient = new TextAnalyticsClient(textAnalyticsEndpoint,  new AzureKeyCredential(textAnalyticsKey));
-        console.log("hiiii",textAnalyticsClient)
+        // console.log("hiiii",textAnalyticsClient)
         let keyPhrasesText = "KEY PHRASES: ";
         const keyPhraseResult =  await textAnalyticsClient.extractKeyPhrases(keyPhrasesInput);             
         keyPhraseResult.forEach(document => {            

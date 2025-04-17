@@ -54,21 +54,21 @@ const Selectaudio = (props) => {
   const CACHE_EXPIRY_TIME = 60 * 60 * 1000; // 1 hr
   useEffect(() => {
     async function fetchBlobs() {
-      const cachedBlobs = localStorage.getItem('cachedBlobs');
-      const cacheTimestamp = localStorage.getItem('cacheTimestamp');
-      const currentTime = new Date().getTime();
+      // const cachedBlobs = localStorage.getItem('cachedBlobs');
+      // const cacheTimestamp = localStorage.getItem('cacheTimestamp');
+      // const currentTime = new Date().getTime();
 
-      if (cachedBlobs && cacheTimestamp && (currentTime - cacheTimestamp) < CACHE_EXPIRY_TIME) {
-        const parsedBlobs = JSON.parse(cachedBlobs);
-        const filteredBlobs = filterBlobsForPage(parsedBlobs);
-        setBlobList(filteredBlobs);
-      } else {
+      // if (cachedBlobs && cacheTimestamp && (currentTime - cacheTimestamp) < CACHE_EXPIRY_TIME) {
+      //   const parsedBlobs = JSON.parse(cachedBlobs);
+      //   const filteredBlobs = filterBlobsForPage(parsedBlobs);
+      //   setBlobList(filteredBlobs);
+      // } else {
         const fetchedBlobs = await getBlobsInContainer();
-        localStorage.setItem('cachedBlobs', JSON.stringify(fetchedBlobs));
-        localStorage.setItem('cacheTimestamp', currentTime.toString());
+        // localStorage.setItem('cachedBlobs', JSON.stringify(fetchedBlobs));
+        // localStorage.setItem('cacheTimestamp', currentTime.toString());
         const filteredBlobs = filterBlobsForPage(fetchedBlobs);
         setBlobList(filteredBlobs);
-      }
+      // }
     }
 
     fetchBlobs();
@@ -149,7 +149,7 @@ const Selectaudio = (props) => {
         className={classes.button}
         onClick={handleOpen}
       >
-        {t('select-document')}
+        {t('select-Audio')}
       </Button>
       <Popover
         className={classes.popover}

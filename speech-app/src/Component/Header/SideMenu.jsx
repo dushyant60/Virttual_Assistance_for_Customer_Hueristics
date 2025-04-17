@@ -21,7 +21,6 @@ import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import MainTab from '../SpeechAnalytics/MainTab';
 import MonitorTab from '../Monitoring/MonitorTab';
 import { Avatar } from '@material-ui/core';
-import '../../Styles/sidemenu.scss';
 
 const drawerWidth = 240;
 const lightTheme = createTheme({
@@ -159,7 +158,7 @@ const SideMenu = () => {
     const theme = useTheme();
     const location = useLocation();
     const [open, setOpen] = useState(true);
-    const [selectedMenuItem, setSelectedMenuItem] = useState('');
+    const [selectedMenuItem, setSelectedMenuItem] = useState('textAnalytics');
     const [selectedTheme, setSelectedTheme] = useState(localStorage.getItem('selectedTheme') || 'light');
     const { t } = useTranslation();
 

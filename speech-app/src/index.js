@@ -10,7 +10,6 @@ import store,{ persistor } from './Component/Redux/Store/Store';
 import 'bootstrap/dist/css/bootstrap.css';
 import * as serviceWorker from './phone/serviceWorker';
 import LandingPg from './LandingPg';
-import Navbar from './TestLms';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

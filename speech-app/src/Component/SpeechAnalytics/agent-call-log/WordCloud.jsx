@@ -13,59 +13,60 @@ const stopWords = [
 const WordDetails = ({ selectedWord, onClose, open }) => {
   const [wordDetails, setWordDetails] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const summarizationPrompt = [
-          {
-            role: 'system',
-            content: `
-              Explain this word ${selectedWord.text}
-            `,
-          },
-        ];
+  // useEffect(() => {
+  //   const fetchData = async () => {  
+  //     try {
+  //       const summarizationPrompt = [
+  //         {
+  //           role: 'system',
+  //           content: `
+  //             Explain this word ${selectedWord.text}
+  //           `,
+  //         },
+  //       ];
 
-        const apiKey = '0c7473739bb4409a82ce91a565fa983d';
-        const svcName = 'openai-glam';
-        const selectedmodel = 'gpt35-turbo';
-        const maxLength = 50;
-        const temperature = 0.7;
-        const topP = 1;
-        const frequencyPenalty = 0;
-        const presencePenalty = 0;
+  //       const apiKey = 'fdb12bb67a764cd2b74676dd5afa58d3';
+  //       const svcName = 'openai-glam';
+  //       const selectedmodel = 'gpt35-turbo';
+  //       const maxLength = 50;
+  //       const temperature = 0.7;
+  //       const topP = 1;
+  //       const frequencyPenalty = 0;
+  //       const presencePenalty = 0;
 
-        const endpoint = `https://${svcName}.openai.azure.com/openai/deployments/${selectedmodel}/chat/completions?api-version=2023-09-15-preview`;
+  //       const endpoint = `https://azureopenaiol.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2023-09-15-preview`;
 
-        const response = await axios.post(
-          endpoint,
-          {
-            messages: summarizationPrompt,
-            max_tokens: maxLength,
-            temperature: temperature,
-            top_p: topP,
-            frequency_penalty: frequencyPenalty,
-            presence_penalty: presencePenalty,
-          },
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              'api-key': apiKey,
-            },
-          }
-        );
+  //       const response = await axios.post(
+  //         endpoint,
+  //         {
+  //           messages: summarizationPrompt,
+  //           max_tokens: maxLength,
+  //           temperature: temperature,
+  //           top_p: topP,
+  //           frequency_penalty: frequencyPenalty,
+  //           presence_penalty: presencePenalty,
+  //         },
+  //         {
+  //           headers: {
+  //             'Content-Type': 'application/json',
+  //             'api-key': apiKey,
+  //           },
+  //         }
+  //       );
 
-        const data = response.data;
-        setWordDetails(data.choices[0]?.message?.content);
-      } catch (error) {
-        console.error('Error fetching word details:', error);
-      }
-    };
+  //       const data = response.data;
+  //       setWordDetails(data.choices[0]?.message?.content);
+  //     } catch (error) {
+  //       console.error('Error fetching word details:', error);
+  //     }
+  //   };
 
-    fetchData();
-  }, [selectedWord]);
+  //   fetchData();
+  // }, [selectedWord]);
 
   return (
-    <Dialog onClose={onClose} open={open}>
+    <Dialog onClose={onClose} open={open} style={{display: "none"}}>  
+    {/* style={{display: "none"}} is added to hide the dialog box  */}
       <DialogTitle style={{ background:"#3f51b5",color:"white",textTransform:"capitalize"}}>{selectedWord.text}</DialogTitle>
       <DialogContent>
         <p>{wordDetails}</p>

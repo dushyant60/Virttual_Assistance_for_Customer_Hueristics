@@ -7,19 +7,19 @@ const cors = require('cors');
 const twilio = require('twilio');
 const otpGenerator = require('otp-generator');
 // get router
-const openaiRouter = require('./routes/openai-gpt')
+// const openaiRouter = require('./routes/openai-gpt')
 const azurelanguageRouter = require('./routes/azureai-language') 
 const server = require("http").createServer(app);  
 
-// get config
-const config = require('./config.json')
-const port = config[0].web_port
-const speechKey = config[0].speech_subscription_key;
-const speechRegion = config[0].speech_region;
-const endpoint_id = config[0].speech_custom_endpoint_id_optional;
+// get ENV variables
+
+const port = process.env.REACT_APP_WEB_PORT
+const speechKey = process.env.REACT_APP_AZURE_SUBS_KEY;
+const speechRegion = process.env.REACT_APP_AZURE_SERVICE_REGION;
+
 app.use(cors());
 app.use(express.json());
-app.use('/openai', openaiRouter);
+// app.use('/openai', openaiRouter);
 app.use('/azure/language', azurelanguageRouter);
 var https = require('https');
 var fs = require('fs');
@@ -99,7 +99,7 @@ app.get('/api/get-speech-token', async (req, res, next) => {
         try {
             console.log(`Speechkey loaded for speech region ${speechRegion}. Getting token`)
             const tokenResponse = await axios.post(`https://${speechRegion}.api.cognitive.microsoft.com/sts/v1.0/issueToken`, null, headers);
-            res.send({ token: tokenResponse.data, region: speechRegion, endpoint_id: endpoint_id });
+            res.send({ token: tokenResponse.data, region: speechRegion});
         } catch (err) {
             res.status(401).send('There was an error authorizing your speech key.');
         }
@@ -123,7 +123,7 @@ app.post('/make-call', (req, res) => {
     })
     .then(call => {
       console.log(`Call SID: ${call.sid}`);
-      res.status(200).json({ message: 'Call initiated successfully' });
+      res.status(200).json({ message: 'Call initiated successfully' }); 
     })
     .catch(err => {
       console.error('Error making the call:', err);

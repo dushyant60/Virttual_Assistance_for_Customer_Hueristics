@@ -105,65 +105,12 @@ const RecordedCallAnalysis = () => {
             // Load the selected audio file into WaveSurfer
             waveform.load(URL.createObjectURL(properFile));
           }
-      // Now you can use properFile for transcription
-      transcribeAudio(properFile);
+      // // Now you can use properFile for transcription
+      // transcribeAudio(properFile);
     } catch (error) {
       console.error('Error fetching or transcribing audio:', error);
     }
   };
-
-  const transcribeAudio = async (audioFile) => {
-    // Fetch the audio file from the URL
-    // const response = await fetch(File.url);
-    // const audioData = await response.arrayBuffer(); // Convert audio data to ArrayBuffer
-    // const response = await axios.get(File.url, { responseType: 'arraybuffer' });
-    // const audioData = response.data;
-
-    // Load the selected audio file into WaveSurfer if waveform is available
-    // if (waveform && File.url) {
-    //     waveform.load(File.url);
-    // }
-
-    // Create Speech SDK components
-    const tokenObj = await getTokenOrRefresh();
-    const speechConfig = speechsdk.SpeechConfig.fromAuthorizationToken(
-        tokenObj.authToken,
-        tokenObj.region
-    );
-    speechConfig.speechRecognitionLanguage = "en-US";
-
-    // Create AudioConfig from the fetched audio data
-    const audioConfig = speechsdk.AudioConfig.fromWavFileInput(audioFile);
-
-    const recognizer = new speechsdk.SpeechRecognizer(
-        speechConfig,
-        audioConfig
-    );
-
-    recognizer.recognizeOnceAsync((result) => {
-        let newDisplayText;
-        if (result.reason === ResultReason.RecognizedSpeech) {
-            newDisplayText = `RECOGNIZED: Text=${result.text}`;
-            //    setDisplayText(newDisplayText);
-            // const nlpObj = getKeyPhrases(result.text);
-            const sentimentAnalysis = sentiment.analyze(result.text);
-            const sentimentScore = sentimentAnalysis.score;
-
-            // Update the real-time sentiment data
-            setRealTimeSentimentData((prevData) => [...prevData, sentimentScore]);
-            if (sentimentScore >= 0) {
-                setPositiveSentimentData((prevData) => [...prevData, sentimentScore]);
-                setNegativeSentimentData((prevData) => [...prevData, null]); // Set null for negative data
-            } else {
-                setPositiveSentimentData((prevData) => [...prevData, null]); // Set null for positive data
-                setNegativeSentimentData((prevData) => [...prevData, sentimentScore]);
-            }
-        } else {
-            newDisplayText =
-                "ERROR: Speech was cancelled or could not be recognized. Ensure your microphone is working properly.";
-        }
-    });
-};
 
 useEffect(() => {
   // Extract topic words from displayNLPOutput and set to state
@@ -205,54 +152,6 @@ useEffect(() => {
 
     checkToken();
   }, []);
-
-  // async function fileChange(event) {
-  //   const audioFile = event.target.files[0];
-  //   setSelectedFile(audioFile);
-  //   const fileInfo = audioFile.name + ` size=${audioFile.size} bytes `;
-  //   if (waveform && audioFile) {
-  //     // Load the selected audio file into WaveSurfer
-  //     waveform.load(URL.createObjectURL(audioFile));
-  //   }
-
-  //   setDisplayText(fileInfo);
-
-  //   const tokenObj = await getTokenOrRefresh();
-  //   const speechConfig = speechsdk.SpeechConfig.fromAuthorizationToken(
-  //     tokenObj.authToken,
-  //     tokenObj.region
-  //   );
-  //   speechConfig.speechRecognitionLanguage = "en-US";
-  //   const audioConfig = speechsdk.AudioConfig.fromWavFileInput(audioFile);
-  //   const recognizer = new speechsdk.SpeechRecognizer(
-  //     speechConfig,
-  //     audioConfig
-  //   );
-
-  //   recognizer.recognizeOnceAsync((result) => {
-  //     let newDisplayText;
-  //     if (result.reason === ResultReason.RecognizedSpeech) {
-  //       newDisplayText = `RECOGNIZED: Text=${result.text}`;
-  //       //    setDisplayText(newDisplayText);
-  //       // const nlpObj = getKeyPhrases(result.text);
-  //       const sentimentAnalysis = sentiment.analyze(result.text);
-  //       const sentimentScore = sentimentAnalysis.score;
-
-  //       // Update the real-time sentiment data
-  //       setRealTimeSentimentData((prevData) => [...prevData, sentimentScore]);
-  //       if (sentimentScore >= 0) {
-  //         setPositiveSentimentData((prevData) => [...prevData, sentimentScore]);
-  //         setNegativeSentimentData((prevData) => [...prevData, null]); // Set null for negative data
-  //       } else {
-  //         setPositiveSentimentData((prevData) => [...prevData, null]); // Set null for positive data
-  //         setNegativeSentimentData((prevData) => [...prevData, sentimentScore]);
-  //       }
-  //     } else {
-  //       newDisplayText =
-  //         "ERROR: Speech was cancelled or could not be recognized. Ensure your microphone is working properly.";
-  //     }
-  //   });
-  // }
 
   const [waveform, setWaveform] = useState(null);
   const [recognizer, setRecognizer] = useState(null);
@@ -309,9 +208,6 @@ useEffect(() => {
   }, []);
 
   const startTranscriptionFromAudio = async () => {
-    // const fileInput = document.getElementById("audio-file");
-    // const selectedFile = fileInput.files[0];
-
     if (!fileurl) {
       return;
     }
@@ -344,78 +240,46 @@ useEffect(() => {
     conversationTranscriber.sessionStarted = function (s, e) {
       setStartTime(new Date());
     };
-    conversationTranscriber.sessionStopped = function (s, e) {
-      const totalPositiveSentiment = positiveSentimentData.reduce(
-        (sum, score) => sum + (score || 0),
-        0
-      );
-      const totalNegativeSentiment = negativeSentimentData.reduce(
-        (sum, score) => sum + (score || 0),
-        0
-      );
-      const totalSegments = realTimeSentimentData.length;
 
-      const averagePositiveSentiment = totalPositiveSentiment / totalSegments;
-      const averageNegativeSentiment = totalNegativeSentiment / totalSegments;
-
-      // Display or use these values as needed in your component
-
-      conversationTranscriber.stopTranscribingAsync();
-    };
-    conversationTranscriber.canceled = function (s, e) {
-      conversationTranscriber.stopTranscribingAsync();
-    };
     conversationTranscriber.transcribed = async (s, e) => {
-      // Calculate the duration in seconds
       const currentTime = new Date();
       const elapsedSeconds = Math.round((currentTime - startTime) / 1000);
-
-      // Format the transcript with "speaker id: content (duration)" format
       const formattedDuration = formatDuration(elapsedSeconds);
-      setTranscript(
-        (prevTranscript) =>
-          prevTranscript +
-          e.result.speakerId +
-          ": " +
-          e.result.text +
-          " (" +
-          formattedDuration +
-          ")" +
-          "\n\n"
+      
+      setTranscript(prev => 
+        prev + `${e.result.speakerId}: ${e.result.text} (${formattedDuration})\n\n`
       );
+      
       updateSpeakerAndSentence(e.result.speakerId, e.result.text);
-      setDisplayText((prevTranscript) => prevTranscript + e.result.text);
+      setDisplayText(prev => prev + e.result.text);
 
+      // Sentiment Analysis
       const sentimentAnalysis = sentiment.analyze(e.result.text);
       const sentimentScore = sentimentAnalysis.score;
 
-      // Update the real-time sentiment data
-      setRealTimeSentimentData((prevData) => [...prevData, sentimentScore]);
+      setRealTimeSentimentData(prevData => [...prevData, sentimentScore]);
       if (sentimentScore >= 0) {
-        setPositiveSentimentData((prevData) => [...prevData, sentimentScore]);
-        setNegativeSentimentData((prevData) => [...prevData, null]); // Set null for negative data
+        setPositiveSentimentData(prevData => [...prevData, sentimentScore]);
+        setNegativeSentimentData(prevData => [...prevData, null]);
       } else {
-        setPositiveSentimentData((prevData) => [...prevData, null]); // Set null for positive data
-        setNegativeSentimentData((prevData) => [...prevData, sentimentScore]);
+        setPositiveSentimentData(prevData => [...prevData, null]);
+        setNegativeSentimentData(prevData => [...prevData, sentimentScore]);
       }
+
+      // NLP Analysis
       const nlpObj = await getKeyPhrases(e.result.text);
-      const keyPhraseText = JSON.stringify(nlpObj.keyPhrasesExtracted);
-
       entityText = nlpObj.entityExtracted;
-
       nlpText += "\n" + entityText;
       setDisplayNLPOutput(nlpText.replace("<br/>", "\n"));
     };
 
     conversationTranscriber.startTranscribingAsync(
-      function () {
-        setIsTranscribing(true);
-      },
-      function (err) {
-        console.trace("err - starting transcription: " + err);
-      }
+      () => setIsTranscribing(true),
+      (err) => console.trace("err - starting transcription: " + err)
     );
-  };
+};
+
+
   const stopTranscriptionFromAudio = () => {
     if (waveform) {
       waveform.pause();
@@ -455,15 +319,20 @@ useEffect(() => {
   };
 
   const gptCustomPromptCompetion = async (text) => {
-    const apiKey = "69a048f7c20648b6be297521cbc9a94c";
-    const endpoint =
-      "https://openai-vach.openai.azure.com/openai/deployments/openai/completions?api-version=2023-09-15-preview";
-
+    const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
+    const endpoint = process.env.REACT_APP_OPENAI_ENDPOINT;
+  
     try {
+      console.log("Sending request to OpenAI API for GPT Custom Prompt...");
+      console.log("Payload:", {
+        prompt: `generate the proper summary into (20 to 30 words) of the following conversation between two persons. Don't mention caller or agent, only a short summary without any garbage words or special characters: ${text}`,
+        max_tokens: 60,
+      });
+  
       const response = await axios.post(
         endpoint,
         {
-          prompt: `generate the proper sumumary into(20 to 30 words) of the following conversation between two person and don't mention caller agent only short summary without any garbage words or any special characters ${text}`,
+          prompt: `generate the proper summary into (20 to 30 words) of the following conversation between two persons. Don't mention caller or agent, only a short summary without any garbage words or special characters: ${text}`,
           max_tokens: 60,
         },
         {
@@ -473,23 +342,38 @@ useEffect(() => {
           },
         }
       );
-
+  
       const summary = response.data.choices[0].text;
       setSummary(summary);
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error in gptCustomPromptCompetion:", error);
+      console.error("Response Data:", error.response?.data);
     }
   };
+  
   const moderationCompetion = async (text) => {
-    const apiKey = "69a048f7c20648b6be297521cbc9a94c";
-    const endpoint =
-      "https://openai-vach.openai.azure.com/openai/deployments/openai/completions?api-version=2023-09-15-preview";
+    const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
+    const endpoint = process.env.REACT_APP_OPENAI_ENDPOINT;
 
     try {
+      // Ensure text is a string and truncate if necessary
+      if (typeof text !== "string") {
+        console.error("Error: Input text is not a string.");
+        return;
+      }
+      const maxLength = 4000; // Adjust based on API limits
+      const truncatedText = text.length > maxLength ? text.substring(0, maxLength) : text;
+
+      console.log("Sending request to OpenAI API for Moderation...");
+      console.log("Payload:", {
+        prompt: `Highlight the moderate content with the categories and score:\n${truncatedText}`,
+        max_tokens: 50,
+      });
+
       const response = await axios.post(
         endpoint,
         {
-          prompt: `hightight the moderate content with the categories and score:\n${text} "":"\n\n${text}`,
+          prompt: `Highlight the moderate content with the categories and score:\n${truncatedText}`,
           max_tokens: 50,
         },
         {
@@ -503,9 +387,11 @@ useEffect(() => {
       const summary = response.data.choices[0].text;
       setModerate(summary);
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error in moderationCompetion:", error);
+      console.error("Response Data:", error.response?.data);
     }
   };
+  
   return (
     <>
       <Box
@@ -619,109 +505,210 @@ useEffect(() => {
                   <div id="waveform-container"></div>
                 </Box>
                 <Box
-                  style={{
-                    height: "65vh",
-                    overflowY: "auto",
-                    marginTop: "12px",
-                    boxShadow:
-                      "0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, .15)",
-                    background: "white",
-                    borderRadius: "10px",
-                  }}
-                >
-                  <Box
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      background: "#167BF5",
-                      color: "white",
-                    }}
-                  >
-                    <QuestionAnswerOutlined style={{ marginLeft: "8px" }} />
-                    <Typography className={classes.typo}>
-                      Call Report
-                    </Typography>
-                  </Box>
-                  <Divider />
-                  <Box style={{ margin: "6px" }}>
-                    <Box
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        padding: "10px",
-                      }}
-                    >
-                      <Grid contianer spacing={2}>
-                        {/* <Grid item xs={12}>
-                          {summary && (
-                            <>
-                              <Typography
-                                color="default"
-                                variant="h4"
-                                component="h2"
-                                style={{
-                                  fontSize: "15px",
-                                  textDecoration: "Bold",
-                                }}
-                              >
-                                Short Summary:
-                              </Typography>
-                              <Typography color="textSecondary">
-                                {summary}
-                              </Typography>
-                            </>
-                          )}
-                        </Grid> */}
+  style={{
+    height: "65vh",
+    overflowY: "auto",
+    marginTop: "12px",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, .15)",
+    background: "white",
+    borderRadius: "10px",
+  }}
+>
+  <Box
+    style={{
+      display: "flex",
+      alignItems: "center",
+      background: "#167BF5",
+      color: "white",
+      borderTopLeftRadius: "10px",
+      borderTopRightRadius: "10px",
+      padding: "10px",
+    }}
+  >
+    <QuestionAnswerOutlined style={{ marginRight: "8px" }} />
+    <Typography variant="h6">Sentiment Analysis Dashboard</Typography>
+  </Box>
+  
+  <Box
+    style={{
+      padding: "20px",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+    }}
+  >
+    {/* Summary Stats */}
+    <Grid container spacing={2} style={{ marginBottom: "20px" }}>
+      <Grid item xs={4}>
+        <Box
+          style={{
+            background: "#f5f5f5",
+            borderRadius: "10px",
+            padding: "15px",
+            textAlign: "center",
+          }}
+        >
+          <Typography variant="subtitle2" color="textSecondary">
+            Total Segments
+          </Typography>
+          <Typography variant="h6">
+            {realTimeSentimentData.length}
+          </Typography>
+        </Box>
+      </Grid>
+      <Grid item xs={4}>
+        <Box
+          style={{
+            background: "#f5f5f5",
+            borderRadius: "10px",
+            padding: "15px",
+            textAlign: "center",
+          }}
+        >
+          <Typography variant="subtitle2" color="textSecondary">
+            Positive Segments
+          </Typography>
+          <Typography variant="h6" style={{ color: "#00c853" }}>
+            {positiveSentimentData.filter(score => score !== null).length}
+          </Typography>
+        </Box>
+      </Grid>
+      <Grid item xs={4}>
+        <Box
+          style={{
+            background: "#f5f5f5",
+            borderRadius: "10px",
+            padding: "15px",
+            textAlign: "center",
+          }}
+        >
+          <Typography variant="subtitle2" color="textSecondary">
+            Negative Segments
+          </Typography>
+          <Typography variant="h6" style={{ color: "#ff1744" }}>
+            {negativeSentimentData.filter(score => score !== null).length}
+          </Typography>
+        </Box>
+      </Grid>
+    </Grid>
 
-                        <Box
-                          style={{
-                            overflowY: "auto",
-                            marginTop: "25px",
-                            background: "whitesmoke",
-                            borderRadius: "10px",
-                            padding: "10px",
-                          }}
-                        >
-                          <Grid item xs={12}>
-                            {moderate && (
-                              <Typography
-                                variant="body1"
-                                style={{
-                                  textAlign: "Center",
-                                  marginBottom: "5px",
-                                }}
-                              >
-                                Moderation score:none
-                              </Typography>
-                            )}
-                          </Grid>
-                          {moderate && (
-                            <Grid item xs={12}>
-                              <Typography
-                                variant="body1"
-                                style={{ textAlign: "center" }}
-                              >
-                                Avg <span style={{ color: "green" }}>+ve</span>{" "}
-                                Sentiment:{" "}
-                                {calculateAverage(positiveSentimentData)}
-                              </Typography>
-                              <Typography
-                                variant="body1"
-                                style={{ textAlign: "center" }}
-                              >
-                                Avg <span style={{ color: "red" }}>-ve</span>{" "}
-                                Sentiment:{" "}
-                                {calculateAverage(negativeSentimentData)}
-                              </Typography>
-                            </Grid>
-                          )}
-                        </Box>
-                      </Grid>
-                    </Box>
-                  </Box>
-                </Box>
+    {/* Sentiment Score Cards */}
+    <Grid container spacing={3}>
+      <Grid item xs={6}>
+        <Box
+          style={{
+            background: "linear-gradient(135deg, #00ff87 0%, #60efff 100%)",
+            borderRadius: "15px",
+            padding: "20px",
+            color: "white",
+            height: "100%",
+          }}
+        >
+          <Typography variant="h6" style={{ textAlign: "center" }}>
+            Positive Sentiment
+          </Typography>
+          <Typography 
+            variant="h3" 
+            style={{ 
+              textAlign: "center", 
+              marginTop: "10px", 
+              fontWeight: "bold" 
+            }}
+          >
+            {calculateAverage(positiveSentimentData)}
+          </Typography>
+          <Box style={{ marginTop: "15px" }}>
+            <Typography variant="body2" style={{ textAlign: "center" }}>
+              Highest Score: {Math.max(...positiveSentimentData.filter(score => score !== null))}
+            </Typography>
+            <Typography variant="body2" style={{ textAlign: "center" }}>
+              Total Positive Words: {
+                positiveSentimentData.reduce((acc, score) => acc + (score || 0), 0)
+              }
+            </Typography>
+          </Box>
+        </Box>
+      </Grid>
+      
+      <Grid item xs={6}>
+        <Box
+          style={{
+            background: "linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%)",
+            borderRadius: "15px",
+            padding: "20px",
+            color: "white",
+            height: "100%",
+          }}
+        >
+          <Typography variant="h6" style={{ textAlign: "center" }}>
+            Negative Sentiment
+          </Typography>
+          <Typography 
+            variant="h3" 
+            style={{ 
+              textAlign: "center", 
+              marginTop: "10px", 
+              fontWeight: "bold" 
+            }}
+          >
+            {calculateAverage(negativeSentimentData)}
+          </Typography>
+          <Box style={{ marginTop: "15px" }}>
+            <Typography variant="body2" style={{ textAlign: "center" }}>
+              Lowest Score: {Math.min(...negativeSentimentData.filter(score => score !== null))}
+            </Typography>
+            <Typography variant="body2" style={{ textAlign: "center" }}>
+              Total Negative Words: {
+                Math.abs(negativeSentimentData.reduce((acc, score) => acc + (score || 0), 0))
+              }
+            </Typography>
+          </Box>
+        </Box>
+      </Grid>
+    </Grid>
+
+    {/* Overall Sentiment Gauge */}
+    <Box
+      style={{
+        marginTop: "30px",
+        background: "white",
+        borderRadius: "15px",
+        padding: "20px",
+        width: "100%",
+        boxShadow: "0 4px 15px rgba(0,0,0,0.1)",
+      }}
+    >
+      <Typography variant="h6" style={{ textAlign: "center", marginBottom: "15px" }}>
+        Overall Sentiment Trend
+      </Typography>
+      <Box
+        style={{
+          height: "10px",
+          background: "linear-gradient(90deg, #ff6b6b 0%, #ffdd40 50%, #00ff87 100%)",
+          borderRadius: "5px",
+          position: "relative",
+          marginBottom: "30px",
+        }}
+      >
+        <Box
+          style={{
+            position: "absolute",
+            left: `${((calculateAverage(realTimeSentimentData) + 5) / 10) * 100}%`,
+            transform: "translateX(-50%)",
+            top: "-25px",
+          }}
+        >
+          
+        </Box>
+    
+      </Box>
+      <Typography variant="h5" style={{ fontWeight: "bold", margin:"auto" }}>
+            {calculateAverage(realTimeSentimentData)}
+          </Typography>
+
+    </Box>
+  </Box>
+</Box>
               </Grid>
 
               <Grid item xs={12} lg={9} md={9}>

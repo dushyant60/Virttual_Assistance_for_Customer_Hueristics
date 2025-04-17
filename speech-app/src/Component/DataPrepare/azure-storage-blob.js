@@ -2,9 +2,9 @@ import { BlobServiceClient } from "@azure/storage-blob";
 import { clearCache, getCache, setCache } from "./cacheutils";
 
 
-const containerName = 'recorededcall';
-const sasToken = `sp=racwdli&st=2024-03-20T10:23:13Z&se=2025-06-12T18:23:13Z&sv=2022-11-02&sr=c&sig=hI1L%2FM9TTX3AyhlfbosWZkcmfnRcVF5OOphlbrhLMIk%3D`;
-const storageAccountName = 'recordedcall'
+const containerName = process.env.REACT_APP_AZURE_STORAGE_CONTAINER_NAME;
+const sasToken = process.env.REACT_APP_AZURE_STORAGE_SAS_TOKEN;
+const storageAccountName = process.env.REACT_APP_AZURE_STORAGE_ACCOUNT_NAME;
 const uploadUrl = `https://${storageAccountName}.blob.core.windows.net/?${sasToken}`;
 
 

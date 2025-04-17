@@ -434,72 +434,22 @@ const RealTimeCallAnalys = () => {
     setActiveButton(buttonName);
   };
 
-  const  recommendedAnswer= async (text, speakerId) => {
- 
-    let apiKey,svcName
-         apiKey ="fdb12bb67a764cd2b74676dd5afa58d3";
-         svcName ="azureopenaiol"
-   
-    const apiEndpoint = `https://azureopenaiol.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2023-09-15-preview`;
-    console.log("id",speakerId)
+  const recommendedAnswer = async (text, speakerId) => {
+    const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
+    const apiEndpoint = process.env.REACT_APP_OPENAI_ENDPOINT;
+  
+    console.log("id", speakerId);
     try {
       if (speakerId === "Guest-2") {
-      const response = await axios.post(
-        apiEndpoint,
-        {
-          messages: [
-            {
-              role: 'system',
-              content:`Caller's input:\n\n${text}\n\nProvide relevant response`,
-            },
-          ],
-          // temperature,
-          // top_p: topP,
-          // frequency_penalty: frequencyPenalty,
-          // presence_penalty: presencePenalty,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "api-key": apiKey,
-          },
-        }
-      );
-      console.log("ans",response)
-       const summary = response.data.choices[0].message.content
-       setAnswers((prevAnswers) => [...prevAnswers, summary]);
-   
-    }
-   } catch (error) {
-      console.error("Error:", error);
-    }
- 
-};
- 
-  // Caller's input:\n\n${text}\n\nProvide relevant 2 to 3 questions only:
- 
-const recommandQuestion = async (text) => {
- 
-      let apiKey,svcName
-           apiKey ="fdb12bb67a764cd2b74676dd5afa58d3";
-           svcName ="azureopenaiol"
-     
-      const apiEndpoint = `https://azureopenaiol.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2023-09-15-preview`;
-     
-      try {
         const response = await axios.post(
           apiEndpoint,
           {
             messages: [
               {
-                role: 'system',
-                content:`Caller's input:\n\n${text}\n\nProvide relevant 2 to 3 questions only:`,
+                role: "system",
+                content: `Caller's input:\n\n${text}\n\nProvide relevant response`,
               },
             ],
-            // temperature,
-            // top_p: topP,
-            // frequency_penalty: frequencyPenalty,
-            // presence_penalty: presencePenalty,
           },
           {
             headers: {
@@ -508,56 +458,51 @@ const recommandQuestion = async (text) => {
             },
           }
         );
-     
-        if (response.data.choices && response.data.choices.length > 0) {
-          const generatedQuestions = response.data.choices.map(
-            (choice) => choice.message.content
-          );
-          setQuestions((prevQuestions) => [
-            ...prevQuestions,
-            ...generatedQuestions,
-          ]);
-        } else {
-          console.log("No response from the model.");
-        }
-      } catch (error) {
-        console.error("Error:", error);
+        console.log("ans", response);
+        const summary = response.data.choices[0].message.content;
+        setAnswers((prevAnswers) => [...prevAnswers, summary]);
       }
- 
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
   
-  // console.log("Data", conversationData);
-
-  // const Moderation = async (text) => {
-  //   const apiKey = "69a048f7c20648b6be297521cbc9a94c";
-  //   const endpoint =
-  //     "https://openai-vach.openai.azure.com/openai/deployments/openai/completions?api-version=2023-09-15-preview";
-
-  //   try {
-  //     const response = await axios.post(
-  //       endpoint,
-  //       {
-  //         prompt: `generate the score of the moderate:${text}`,
-  //         max_tokens: 100,
-  //       },
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           "api-key": apiKey,
-  //         },
-  //       }
-  //     );
-
-  //     if (response.data.choices && response.data.choices.length > 0) {
-  //       const generatedText = response.data.choices[0].text;
-  //       setQuestions(generatedText);
-  //     } else {
-  //       console.log("No response from the model.");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //   }
-  // };
+  const recommandQuestion = async (text) => {
+    const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
+    const apiEndpoint = process.env.REACT_APP_OPENAI_ENDPOINT;
+  
+    try {
+      const response = await axios.post(
+        apiEndpoint,
+        {
+          messages: [
+            {
+              role: "system",
+              content: `Caller's input:\n\n${text}\n\nProvide relevant 2 to 3 questions only:`,
+            },
+          ],
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "api-key": apiKey,
+          },
+        }
+      );
+  
+      if (response.data.choices && response.data.choices.length > 0) {
+        const generatedQuestions = response.data.choices.map(
+          (choice) => choice.message.content
+        );
+        setQuestions((prevQuestions) => [...prevQuestions, ...generatedQuestions]);
+      } else {
+        console.log("No response from the model.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+  
 
   useEffect(() => {
     if (audioBlob) {

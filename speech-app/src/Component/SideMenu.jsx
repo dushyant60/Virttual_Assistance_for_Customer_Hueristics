@@ -28,7 +28,7 @@ import Dashboard from './Home/Dashboard';
 import CallLog from './Monitoring/CallLogs';
 import Calendar from 'react-calendar';
 import CallRescheduleComponent from './SpeechAnalytics/Calender';
-import CustomerPage from './SpeechAnalytics/CustomerPage';
+import CustomerPage from './Search/CustomerPage';
 import MainTab from './SpeechAnalytics/MainTab';
 import MonitorTab from './Monitoring/MonitorTab';
 
