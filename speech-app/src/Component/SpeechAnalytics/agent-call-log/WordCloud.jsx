@@ -1,126 +1,152 @@
-import React, { useState, useEffect } from 'react';
-import ReactWordcloud from 'react-wordcloud';
-import 'tippy.js/dist/tippy.css';
-import 'tippy.js/animations/scale.css';
-import axios from 'axios';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@material-ui/core';
+import React, { useState, useEffect, useMemo } from 'react';
+import { Box, Typography, Tooltip, makeStyles } from '@material-ui/core';
+import { motion, AnimatePresence } from 'framer-motion';
 
-const stopWords = [
-  'a', 'an', 'the', 'and', 'in', 'on', 'at', 'to', 'for', 'with', 'as',
-  'of', 'by', 'from', 'is', 'it', 'this', 'that', 'which', 'he', 'she', 'what', 'have', 'does', 'did', 'they', 'were', 'and', 'be', 'these', 'where', 'we', 'will'
-];
+const useStyles = makeStyles((theme) => ({
+  wordCloudContainer: {
+    width: '100%',
+    height: '100%',
+    position: 'relative',
+    background: 'white',
+    borderRadius: '12px',
+    overflow: 'hidden',
+  },
+  word: {
+    cursor: 'pointer',
+    userSelect: 'none',
+    transition: 'all 0.3s ease',
+    fontFamily: '"Inter", sans-serif',
+    '&:hover': {
+      filter: 'brightness(0.9)',
+    },
+  },
+}));
 
-const WordDetails = ({ selectedWord, onClose, open }) => {
-  const [wordDetails, setWordDetails] = useState(null);
+const getRandomPosition = (containerWidth, containerHeight, wordWidth, wordHeight) => {
+  const x = Math.random() * (containerWidth - wordWidth);
+  const y = Math.random() * (containerHeight - wordHeight);
+  return { x, y };
+};
 
-  // useEffect(() => {
-  //   const fetchData = async () => {  
-  //     try {
-  //       const summarizationPrompt = [
-  //         {
-  //           role: 'system',
-  //           content: `
-  //             Explain this word ${selectedWord.text}
-  //           `,
-  //         },
-  //       ];
-
-  //       const apiKey = 'fdb12bb67a764cd2b74676dd5afa58d3';
-  //       const svcName = 'openai-glam';
-  //       const selectedmodel = 'gpt35-turbo';
-  //       const maxLength = 50;
-  //       const temperature = 0.7;
-  //       const topP = 1;
-  //       const frequencyPenalty = 0;
-  //       const presencePenalty = 0;
-
-  //       const endpoint = `https://azureopenaiol.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2023-09-15-preview`;
-
-  //       const response = await axios.post(
-  //         endpoint,
-  //         {
-  //           messages: summarizationPrompt,
-  //           max_tokens: maxLength,
-  //           temperature: temperature,
-  //           top_p: topP,
-  //           frequency_penalty: frequencyPenalty,
-  //           presence_penalty: presencePenalty,
-  //         },
-  //         {
-  //           headers: {
-  //             'Content-Type': 'application/json',
-  //             'api-key': apiKey,
-  //           },
-  //         }
-  //       );
-
-  //       const data = response.data;
-  //       setWordDetails(data.choices[0]?.message?.content);
-  //     } catch (error) {
-  //       console.error('Error fetching word details:', error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [selectedWord]);
-
-  return (
-    <Dialog onClose={onClose} open={open} style={{display: "none"}}>  
-    {/* style={{display: "none"}} is added to hide the dialog box  */}
-      <DialogTitle style={{ background:"#3f51b5",color:"white",textTransform:"capitalize"}}>{selectedWord.text}</DialogTitle>
-      <DialogContent>
-        <p>{wordDetails}</p>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} color="primary">
-          Close
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
+const getColor = (value) => {
+  const colors = [
+    '#2196F3', // Blue
+    '#1976D2', // Darker Blue
+    '#64B5F6', // Lighter Blue
+    '#0D47A1', // Very Dark Blue
+    '#42A5F5', // Medium Blue
+  ];
+  return colors[Math.floor(Math.random() * colors.length)];
 };
 
 const WordCloud = ({ text }) => {
-  const [selectedWord, setSelectedWord] = useState(null);
-  const [open, setOpen] = useState(false);
+  const classes = useStyles();
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const [hoveredWord, setHoveredWord] = useState(null);
+  const containerRef = React.useRef(null);
 
-  const handleWordClick = (word) => {
-    setSelectedWord(word);
-    setOpen(true);
-  };
+  const stopWords = [
+    'a', 'an', 'the', 'and', 'in', 'on', 'at', 'to', 'for', 'with', 'as',
+    'of', 'by', 'from', 'is', 'it', 'this', 'that', 'which', 'he', 'she',
+    'what', 'have', 'does', 'did', 'they', 'were', 'be', 'these', 'where', 'we', 'will'
+  ];
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const words = useMemo(() => {
+    if (!text) return [];
+    
+    const wordCounts = text.toLowerCase()
+      .split(/\s+/)
+      .filter(word => !stopWords.includes(word))
+      .reduce((acc, word) => {
+        acc[word] = (acc[word] || 0) + 1;
+        return acc;
+      }, {});
 
-  // Check if the text is provided and not empty
-  if (!text || typeof text !== 'string' || text.trim() === '') {
-    return null;
-  }
+    return Object.entries(wordCounts)
+      .map(([text, count]) => ({
+        text,
+        value: count,
+        size: Math.max(16, Math.min(48, count * 8)), // Font size between 16 and 48
+        color: getColor(count),
+        position: { x: 0, y: 0 },
+      }))
+      .sort((a, b) => b.value - a.value)
+      .slice(0, 50); // Limit to top 50 words
+  }, [text]);
 
-  const words = text.split(' ')
-    .filter(word => !stopWords.includes(word))
-    .map(word => ({
-      text: word,
-      value: 1 + Math.floor(Math.random() * 10),
-    }));
+  useEffect(() => {
+    if (containerRef.current) {
+      const updateDimensions = () => {
+        setDimensions({
+          width: containerRef.current.offsetWidth,
+          height: containerRef.current.offsetHeight,
+        });
+      };
 
-  const options = {
-    rotations: 2,
-    rotationAngles: [-90, 0],
-  };
+      updateDimensions();
+      window.addEventListener('resize', updateDimensions);
+      return () => window.removeEventListener('resize', updateDimensions);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (dimensions.width && dimensions.height) {
+      words.forEach(word => {
+        word.position = getRandomPosition(
+          dimensions.width,
+          dimensions.height,
+          word.size * word.text.length * 0.6,
+          word.size
+        );
+      });
+    }
+  }, [dimensions, words]);
 
   return (
-    <div style={{ display: 'flex', alignItems:"center", justifyContent:"center"}}>
-      <div>
-        <ReactWordcloud words={words} options={options} callbacks={{ onWordClick: handleWordClick }} />
-      </div>
-      <div style={{ marginLeft: '20px' }}>
-        {selectedWord && (
-          <WordDetails selectedWord={selectedWord} onClose={handleClose} open={open} />
-        )}
-      </div>
-    </div>
+    <Box
+      ref={containerRef}
+      className={classes.wordCloudContainer}
+      style={{ minHeight: '300px' }}
+    >
+      <AnimatePresence>
+        {words.map((word, index) => (
+          <Tooltip
+            key={word.text}
+            title={`Frequency: ${word.value}`}
+            placement="top"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ 
+                opacity: 1, 
+                scale: 1,
+                x: word.position.x,
+                y: word.position.y,
+              }}
+              exit={{ opacity: 0, scale: 0 }}
+              transition={{ 
+                duration: 0.5,
+                delay: index * 0.02,
+                type: 'spring',
+                stiffness: 100
+              }}
+              style={{
+                position: 'absolute',
+                fontSize: `${word.size}px`,
+                color: word.color,
+                fontWeight: word.value > 2 ? 600 : 400,
+              }}
+              className={classes.word}
+              onMouseEnter={() => setHoveredWord(word)}
+              onMouseLeave={() => setHoveredWord(null)}
+              whileHover={{ scale: 1.1 }}
+            >
+              {word.text}
+            </motion.div>
+          </Tooltip>
+        ))}
+      </AnimatePresence>
+    </Box>
   );
 };
 

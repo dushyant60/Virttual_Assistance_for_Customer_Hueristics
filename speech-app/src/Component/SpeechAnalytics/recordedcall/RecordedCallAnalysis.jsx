@@ -924,75 +924,107 @@ useEffect(() => {
           <Grid item xs={12} lg={4} md={4}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <Box
-                  style={{
-                    borderRadius: "10px",
-                    height: "40vh",
-                    overflowY: "auto",
-                    boxShadow:
-                      "0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, .15)",
-                    marginLeft: "12px",
-                    background: "white",
-                  }}
-                  ref={transcriptRef}
-                >
-                  <Box
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      top:0,
-                      position:"sticky",
-                      background: "#167BF5",
-                      color: "white",
-                    }}
-                  >
-                    <Box
-                      style={{
-                        width: "100%",
-                        display: "flex",
-                        marginLeft: "4px",
-                        alignItems: "center",
-                      }}
-                    >
-                      <FindInPageOutlined style={{ marginLeft: "8px" }} />
-                      <Typography className={classes.typo}>Topics</Typography>
-                    </Box>
-                    <Box
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "end",
-                        width: "80%",
-                        marginRight: "12px",
-                      }}
-                    >
-                      <SaveAlt />
-                    </Box>
-                  </Box>
-                  <Divider />
-                  <Box style={{ margin: "5px" }}>
-                    {displayNLPOutput
-                      .split(/\n/) // Split the text by newline characters
-                      .filter((entry) => entry.trim() !== "") // Remove empty lines
-                      .map((line, index) => {
-                        const keyValuePairs = line.trim().split(/\s+(?=\w+:)/);
+<Box
+  style={{
+    borderRadius: "10px",
+    height: "40vh",
+    overflowY: "auto",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, .15)",
+    marginLeft: "12px",
+    background: "white",
+  }}
+  ref={transcriptRef}
+>
+  <Box
+    style={{
+      display: "flex",
+      alignItems: "center",
+      top: 0,
+      position: "sticky",
+      background: "#167BF5",
+      color: "white",
+      padding: "12px",
+    }}
+  >
+    <Box
+      style={{
+        width: "100%",
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
+      <FindInPageOutlined style={{ marginRight: "8px" }} />
+      <Typography style={{ fontSize: "16px", fontWeight: "500" }}>
+        Conversation Details
+      </Typography>
+    </Box>
+  </Box>
+  <Divider />
+  <Box style={{ padding: "16px" }}>
+    {(() => {
+      // Create an object to group values by key
+      const groupedData = {};
+      
+      displayNLPOutput
+        .split(/\n/)
+        .filter((entry) => entry.trim() !== "")
+        .forEach((line) => {
+          const keyValuePairs = line.trim().split(/\s+(?=\w+:)/);
+          keyValuePairs.forEach((pair) => {
+            const [key, value] = pair.split(":");
+            if (key && value) {
+              if (!groupedData[key]) {
+                groupedData[key] = new Set();
+              }
+              value.trim().split(" ").forEach(item => {
+                if (item.trim()) {
+                  groupedData[key].add(item.trim());
+                }
+              });
+            }
+          });
+        });
 
-                        return (
-                          <div key={index}>
-                            {keyValuePairs.map((keyValuePair, kvIndex) => {
-                              const [key, value] = keyValuePair.split(":");
-                              return (
-                                <Typography key={kvIndex}>
-                                  <strong>{key}:</strong> {value}
-                                </Typography>
-                              );
-                            })}
-                            {/* s<br /> Add a line break between key-value pairs */}
-                          </div>
-                        );
-                      })}
-                  </Box>
-                </Box>
+      // Render the grouped data
+      return Object.entries(groupedData).map(([key, valueSet], index) => (
+        <Box key={index} style={{ marginBottom: "16px" }}>
+          <Typography
+            style={{
+              color: "#666",
+              fontSize: "14px",
+              marginBottom: "8px",
+            }}
+          >
+            {key}:
+          </Typography>
+          <Box
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "8px",
+            }}
+          >
+            {Array.from(valueSet).map((item, i) => (
+              <Box
+                key={i}
+                style={{
+                  backgroundColor: "#f0f7ff",
+                  color: "#167BF5",
+                  padding: "4px 12px",
+                  borderRadius: "16px",
+                  fontSize: "13px",
+                  display: "inline-block",
+                }}
+              >
+                {item}
+              </Box>
+            ))}
+          </Box>
+        </Box>
+      ));
+    })()}
+  </Box>
+</Box>
               </Grid>
               <Grid item xs={12} lg={12}>
                 <Box
