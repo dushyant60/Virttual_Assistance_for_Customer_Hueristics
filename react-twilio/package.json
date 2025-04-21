@@ -1,0 +1,61 @@
+{
+  "name": "react-express-starter",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@azure/cosmos": "^4.0.0",
+    "@azure/openai": "^1.0.0-beta.12",
+    "@azure/storage-blob": "^12.17.0",
+    "@deepgram/sdk": "^3.4.0",
+    "@google-cloud/speech": "^6.6.0",
+    "@material-ui/core": "^4.12.4",
+    "@material-ui/icons": "^4.11.3",
+    "assemblyai": "^4.3.2",
+    "axios": "^1.7.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "meyda": "^4.3.1",
+    "microsoft-cognitiveservices-speech-sdk": "^1.35.0",
+    "mongoose": "^8.2.3",
+    "node-schedule": "^2.1.1",
+    "openai": "^4.52.5",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-icons": "^4.11.0",
+    "react-scripts": "^5.0.1",
+    "twilio-client": "^1.10.0",
+    "util": "^0.12.5",
+    "wavefile": "^11.0.0",
+    "ws": "^8.14.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "server": "node-env-run server --exec nodemon | pino-colada",
+    "dev": "run-p server start"
+  },
+  "proxy": "http://localhost:3001",
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "devDependencies": {
+    "@types/meyda": "^4.3.0",
+    "body-parser": "^1.19.0",
+    "esm": "^3.2.25",
+    "express": "^4.18.2",
+    "express-pino-logger": "^4.0.0",
+    "node-env-run": "^4.0.2",
+    "nodemon": "^2.0.20",
+    "npm-run-all": "^4.1.5",
+    "pino-colada": "^1.4.5",
+    "twilio": "^3.84.1"
+  }
+}

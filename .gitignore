@@ -1,7 +1,5 @@
 # Ignore sensitive files
 .env
-*.json
-
 # dependencies
 /node_modules
 /minikube-deploy
