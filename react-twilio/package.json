@@ -8,8 +8,6 @@
     "@azure/storage-blob": "^12.17.0",
     "@deepgram/sdk": "^3.4.0",
     "@google-cloud/speech": "^6.6.0",
-    "@material-ui/core": "^4.12.4",
-    "@material-ui/icons": "^4.11.3",
     "assemblyai": "^4.3.2",
     "axios": "^1.7.2",
     "cors": "^2.8.5",
