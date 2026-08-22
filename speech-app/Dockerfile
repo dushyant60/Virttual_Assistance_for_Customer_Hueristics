@@ -5,6 +5,6 @@ COPY  package.json ./
 COPY  package-lock.json ./
 COPY ./ ./
 RUN npm i -f
-ENV REACT_APP_OPENAI_API_KEY=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
-ENV REACT_APP_API=//glam1.onelogica.com
+ENV REACT_APP_OPENAI_API_KEY=sk-gSTBncsddsc.....
+ENV REACT_APP_API=//sample..com
 CMD ["npm","start"]
